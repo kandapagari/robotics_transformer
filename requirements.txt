@@ -1,3 +1,4 @@
+--extra-index-url https://pypi.nvidia.com
 absl-py>=0.5.0
 numpy>=1.13.3
 tensorflow>=1.13.0
@@ -8,7 +9,7 @@ tf-agents>=0.3.0
 tf-slim>=1.0
 nvidia-cublas-cu11
 nvidia-cudnn-cu11
-skimage
+tensorrt
 -e tensor2robot
 # git+https://github.com/google-research/tensor2robot#tensor2robot
 # https://github.com/google-research/robotics_transformer/issues/1#issuecomment-1758818832

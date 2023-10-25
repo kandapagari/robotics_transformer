@@ -20,7 +20,7 @@ Robotics Transformer or RT-1.
 Clone the repo
 
 ```bash
-git clone https://github.com/google-research/robotics_transformer.git
+git clone --recursive https://github.com/kandapagari/robotics_transformer.git
 conda create -n rt python=3.11 -y
 pip install -r robotics_transformer/requirements.txt
 cd tensor2robot/proto
@@ -34,7 +34,7 @@ To run RT-1 tests, you can clone the git repo and run
 [bazel](https://bazel.build/):
 
 ```bash
-git clone https://github.com/google_research/robotics_transformer.git
+git clone --recursive https://github.com/kandapagari/robotics_transformer.git
 cd robotics_transformer
 bazel test ...
 ```
