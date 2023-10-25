@@ -1,0 +1,3 @@
+[submodule "tensor2robot"]
+	path = tensor2robot
+	url = https://github.com/google-research/tensor2robot
