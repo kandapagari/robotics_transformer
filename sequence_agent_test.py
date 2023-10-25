@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2022 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,17 +13,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for sequence_agent."""
-from robotics_transformer.sequence_agent_test_set_up import SequenceAgentTestSetUp
 import tensorflow as tf
 from tf_agents.agents import data_converter
+
+from robotics_transformer.sequence_agent_test_set_up import \
+    SequenceAgentTestSetUp
 
 
 class SequenceAgentTest(SequenceAgentTestSetUp):
 
-  def testAsTransitionType(self):
-    agent = self.create_agent_and_initialize()
-    self.assertIsInstance(agent.as_transition, data_converter.AsHalfTransition)
+    def testAsTransitionType(self):
+        agent = self.create_agent_and_initialize()
+        self.assertIsInstance(agent.as_transition,
+                              data_converter.AsHalfTransition)
 
 
 if __name__ == '__main__':
-  tf.test.main()
+    tf.test.main()

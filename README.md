@@ -1,26 +1,31 @@
 # Robotics Transformer
 
-*This is not an officially supported Google product.*
-
+_This is not an officially supported Google product._
+_changed by @kandapagari_
 
 This repository is a collection code files and artifacts for running
 Robotics Transformer or RT-1.
 
 ## Features
 
-* Film efficient net based image tokenizer backbone
-* Token learner based compression of input tokens
-* Transformer for end to end robotic control
-* Testing utilities
+- Film efficient net based image tokenizer backbone
+- Token learner based compression of input tokens
+- Transformer for end to end robotic control
+- Testing utilities
 
 ## Getting Started
 
 ### Installation
+
 Clone the repo
+
 ```bash
 git clone https://github.com/google-research/robotics_transformer.git
+conda create -n rt python=3.11 -y
 pip install -r robotics_transformer/requirements.txt
-python -m robotics_transformer.tokenizers.action_tokenizer.test
+cd tensor2robot/proto
+protoc -I=./ --python_out=`pwd` t2r.proto
+python -m robotics_transformer.tokenizers.action_tokenizer_test
 ```
 
 ### Running Tests
@@ -35,13 +40,14 @@ bazel test ...
 ```
 
 ### Using trained checkpoints
+
 Checkpoints are included in trained_checkpoints/ folder for three models:
+
 1. [RT-1 trained on 700 tasks](trained_checkpoints/rt1main)
 2. [RT-1 jointly trained on EDR and Kuka data](trained_checkpoints/rt1multirobot)
 3. [RT-1 jointly trained on sim and real data](trained_checkpoints/rt1simreal)
 
 They are tensorflow SavedModel files. Instructions on usage can be found [here](https://www.tensorflow.org/guide/saved_model)
-
 
 ## Future Releases
 

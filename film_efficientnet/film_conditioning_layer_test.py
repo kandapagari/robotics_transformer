@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2022 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,29 +13,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for film_conditioning_layer."""
-from absl.testing import parameterized
 import numpy as np
-from robotics_transformer.film_efficientnet import film_conditioning_layer
 import tensorflow as tf
+from absl.testing import parameterized
+
+from robotics_transformer.film_efficientnet import film_conditioning_layer
 
 
 class FilmConditioningLayerTest(tf.test.TestCase, parameterized.TestCase):
 
-  @parameterized.parameters([2, 4])
-  def test_film_conditioning_rank_two_and_four(self, conv_rank):
-    batch = 2
-    num_channels = 3
-    if conv_rank == 2:
-      conv_layer = np.random.randn(batch, num_channels)
-    elif conv_rank == 4:
-      conv_layer = np.random.randn(batch, 1, 1, num_channels)
-    else:
-      raise ValueError(f'Unexpected conv rank: {conv_rank}')
-    context = np.random.rand(batch, num_channels)
-    film_layer = film_conditioning_layer.FilmConditioning(num_channels)
-    out = film_layer(conv_layer, context)
-    tf.debugging.assert_rank(out, conv_rank)
+    @parameterized.parameters([2, 4])
+    def test_film_conditioning_rank_two_and_four(self, conv_rank):
+        batch = 2
+        num_channels = 3
+        if conv_rank == 2:
+            conv_layer = np.random.randn(batch, num_channels)
+        elif conv_rank == 4:
+            conv_layer = np.random.randn(batch, 1, 1, num_channels)
+        else:
+            raise ValueError(f'Unexpected conv rank: {conv_rank}')
+        context = np.random.rand(batch, num_channels)
+        film_layer = film_conditioning_layer.FilmConditioning(num_channels)
+        out = film_layer(conv_layer, context)
+        tf.debugging.assert_rank(out, conv_rank)
 
 
 if __name__ == '__main__':
-  tf.test.main()
+    tf.test.main()

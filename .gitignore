@@ -10,7 +10,6 @@ _pycache__/
 .eggs/
 build/
 dist/
-poetry.lock
 
 # Tests
 .pytest_cache/

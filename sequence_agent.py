@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2022 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,12 +18,11 @@ These classes are not intended to change as they are generic enough for any
 all-neural actor based agent+policy. All new features are intended to be
 implemented in `actor_network` and `loss_fn`.
 """
-from typing import Optional, Type
+from typing import Optional
 
-from absl import logging
 import tensorflow as tf
-from tf_agents.agents import data_converter
-from tf_agents.agents import tf_agent
+from absl import logging
+from tf_agents.agents import data_converter, tf_agent
 from tf_agents.networks import network
 from tf_agents.policies import actor_policy
 from tf_agents.trajectories import policy_step
@@ -73,14 +73,15 @@ class SequenceAgent(tf_agent.TFAgent):
     def __init__(self,
                  time_step_spec: ts.TimeStep,
                  action_spec: types.NestedTensorSpec,
-                 actor_network: Type[network.Network],
+                 actor_network: type[network.Network],
                  actor_optimizer: tf.keras.optimizers.Optimizer,
-                 policy_cls: Type[actor_policy.ActorPolicy] = SequencePolicy,
+                 policy_cls: type[actor_policy.ActorPolicy] = SequencePolicy,
                  time_sequence_length: int = 6,
                  debug_summaries: bool = False,
                  **kwargs):
         self._info_spec = ()
-        self._actor_network = actor_network(  # pytype: disable=missing-parameter  # dynamic-method-lookup
+        self._actor_network = actor_network(  # pytype: disable=missing-parameter
+            # dynamic-method-lookup
             input_tensor_spec=time_step_spec.observation,
             output_tensor_spec=action_spec,
             policy_info_spec=self._info_spec,

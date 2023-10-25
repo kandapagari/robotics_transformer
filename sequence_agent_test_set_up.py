@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2022 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,16 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for sequence_agent."""
-from typing import Type
 
 import numpy as np
-from robotics_transformer import sequence_agent
-from tensor2robot.utils import tensorspec_utils
 import tensorflow as tf
 from tf_agents.networks import network
 from tf_agents.policies import policy_saver
 from tf_agents.specs import tensor_spec
 from tf_agents.trajectories import time_step as ts
+
+from robotics_transformer import sequence_agent
+from tensor2robot.utils import tensorspec_utils
 
 
 class DummyActorNet(network.Network):
@@ -69,7 +70,8 @@ class DummyActorNet(network.Network):
 
 
 class SequenceAgentTestSetUp(tf.test.TestCase):
-    """Defines spec for testing SequenceAgent and its subclass, tests create."""
+    """Defines spec for testing SequenceAgent and its subclass, tests
+    create."""
 
     def setUp(self):
         super().setUp()
@@ -106,7 +108,7 @@ class SequenceAgentTestSetUp(tf.test.TestCase):
         self.sequence_agent_cls = sequence_agent.SequenceAgent
 
     def create_agent_and_initialize(self,
-                                    actor_network: Type[
+                                    actor_network: type[
                                         network.Network] = DummyActorNet,
                                     **kwargs):
         """Creates the agent and initialize it."""
