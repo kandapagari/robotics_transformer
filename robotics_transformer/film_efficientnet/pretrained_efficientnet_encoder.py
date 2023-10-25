@@ -95,8 +95,7 @@ class EfficientNetEncoder(tf.keras.layers.Layer):
         c2 = tf.Assert(tf.reduce_min(image) >= 0, data=[tf.reduce_min(image)])
         with tf.control_dependencies([c1, c2]):
             image *= 255  # The image is expected to be in range(0, 255).
-            image = film_efficientnet_encoder.preprocess_input(image)
-            return image
+            return film_efficientnet_encoder.preprocess_input(image)
 
     def _encode(self, image: tf.Tensor, context: tf.Tensor,
                 training: bool) -> tf.Tensor:
@@ -118,8 +117,4 @@ class EfficientNetEncoder(tf.keras.layers.Layer):
             features = self.conv1x1(features)
             features = self.film_layer(features, context)
 
-        if not self._pooling:
-            return features
-
-        # Global average pool.
-        return tf.reduce_mean(features, [1, 2])
+        return tf.reduce_mean(features, [1, 2]) if self._pooling else features

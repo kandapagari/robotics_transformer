@@ -22,7 +22,7 @@ import tensorflow as tf
 
 
 def gelu(x: float) -> float:
-    return 0.5 * x * (1 +
+    return 0.5 * x * (1 + # NOQA
                       tf.tanh(tf.sqrt(2 / np.pi) * (x + 0.044715 * tf.pow(x, 3))))
 
 
@@ -126,6 +126,4 @@ class TokenLearnerModule(tf.keras.layers.Layer):
         selected = tf.transpose(selected, [0, 2, 1])
         selected = tf.nn.softmax(selected, axis=-1)
 
-        feat = tf.einsum("...si,...id->...sd", selected, inputs)
-
-        return feat  # Shape: [bs, n_token, c]
+        return tf.einsum("...si,...id->...sd", selected, inputs)

@@ -58,8 +58,9 @@ class RT1ActionTokenizer:
         else:
             for action in action_order:
                 if action not in self._action_spec.keys():
-                    raise ValueError('actions: %s not found in action_spec: %s' %
-                                     (action, action_spec.keys()))
+                    raise ValueError(
+                        f'actions: {action} not found in action_spec: {action_spec.keys()}'
+                    )
                 assert action in self._action_spec.keys()
             self._action_order = action_order
         self._tokens_per_action = 0
@@ -67,25 +68,19 @@ class RT1ActionTokenizer:
             action_shape = self._action_spec[action].shape
             if len(action_shape) != 1:
                 raise ValueError(
-                    'Only action shapes with single dimension supported, got %s' %
-                    action_shape)
+                    f'Only action shapes with single dimension supported, got {action_shape}'
+                )
             if self._action_spec[action].dtype == tf.int32:
                 # Int32 actions are already assumed to be tokens.
                 self._tokens_per_action += 1
             else:
                 self._tokens_per_action += action_shape[0]
 
-        # We measure # of action tokens in two different way. One is by checking
-        # from action_order (above) and the other is by looping through the
-        # action spec (below). We aseert the # of action tokens are the same
-        # calculated by these two ways. This will assure action_order is correctly
-        # configured, otherwise, it will through an error in the assert.
-        num_action_token = 0
-        for spec in self._action_spec.values():
-            if spec.dtype == tf.int32:
-                num_action_token += 1
-            else:
-                num_action_token += spec.shape[-1]
+        num_action_token = sum(
+            1 if spec.dtype == tf.int32 else spec.shape[-1]
+            for spec in self._action_spec.values()
+        )
+        tf.debugging.assert_equal(num_action_token, self._tokens_per_action)
         tf.debugging.assert_equal(num_action_token, self._tokens_per_action)
 
     @property
@@ -122,9 +117,7 @@ class RT1ActionTokenizer:
                 # Bucket and discretize the action to vocab_size, [batch, actions_size]
                 token = tf.cast(token * (self._vocab_size - 1), tf.int32)
             action_tokens.append(token)
-        # Append all actions, [batch, all_actions_size]
-        action_tokens = tf.concat(action_tokens, axis=-1)
-        return action_tokens
+        return tf.concat(action_tokens, axis=-1)
 
     def detokenize(self,
                    action_tokens: tf.Tensor) -> tensorspec_utils.TensorSpecStruct:

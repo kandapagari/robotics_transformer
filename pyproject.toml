@@ -4,6 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Pavan Kumar Kandapagari <pavan.kandapagari@agile-robots.com>"]
 readme = "README.md"
+packages = [{ include = 'robotics_transformer' }]
 
 [tool.poetry.dependencies]
 python = "^3.11"

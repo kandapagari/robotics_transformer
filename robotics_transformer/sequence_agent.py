@@ -63,8 +63,7 @@ class SequencePolicy(actor_policy.ActorPolicy):
         return policy_step.PolicyStep(action, policy_state, info)
 
     def _distribution(self, time_step, policy_state):
-        current_step = super()._distribution(time_step, policy_state)
-        return current_step
+        return super()._distribution(time_step, policy_state)
 
 
 class SequenceAgent(tf_agent.TFAgent):
@@ -161,13 +160,16 @@ class SequenceAgent(tf_agent.TFAgent):
         policy.set_actions(policy_steps.action)
         policy.set_training(training=training)
         with tf.name_scope('actor_loss'):
-            policy_state = policy.get_initial_state(batch_size)
-            policy.action(time_steps, policy_state=policy_state)
-            valid_mask = tf.cast(~time_steps.is_last(), tf.float32)
-            loss = valid_mask * policy.get_actor_loss()
-            loss = tf.reduce_mean(loss)
-            policy.set_actions(None)
-            self._actor_network.add_summaries(time_steps.observation,
-                                              policy.get_aux_info(),
-                                              self._debug_summaries, training)
-            return tf_agent.LossInfo(loss=loss, extra=loss)
+            return self._get_agent_loss(policy, batch_size, time_steps, training)
+
+    def _get_agent_loss(self, policy, batch_size, time_steps, training):
+        policy_state = policy.get_initial_state(batch_size)
+        policy.action(time_steps, policy_state=policy_state)
+        valid_mask = tf.cast(~time_steps.is_last(), tf.float32)
+        loss = valid_mask * policy.get_actor_loss()
+        loss = tf.reduce_mean(loss)
+        policy.set_actions(None)
+        self._actor_network.add_summaries(time_steps.observation,
+                                          policy.get_aux_info(),
+                                          self._debug_summaries, training)
+        return tf_agent.LossInfo(loss=loss, extra=loss)

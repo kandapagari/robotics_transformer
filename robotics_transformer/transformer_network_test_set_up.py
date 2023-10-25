@@ -112,8 +112,8 @@ class FakeImageTokenizer(tf.keras.layers.Layer):
     """Fake Image Tokenizer for testing Transformer."""
 
     def __init__(self,
-                 encoder: ..., # NOQA
-                 position_embedding: ..., # NOQA
+                 encoder: ...,
+                 position_embedding: ...,
                  embedding_output_dim: int,
                  patch_size: int,
                  use_token_learner: bool = False,
@@ -307,12 +307,11 @@ class TransformerNetworkTestUtils(tf.test.TestCase, parameterized.TestCase):
             [batch_size, 1, vocab_size])
 
     def create_obs(self, value) -> dict[str, tf.Tensor]:
-        observations = {}
-        observations['image'] = value * self._inference_observation['image']
-        observations[
-            'natural_language_embedding'] = value * self._inference_observation[
-                'natural_language_embedding']
-        return observations
+        return {
+            'image': value * self._inference_observation['image'],
+            'natural_language_embedding': value
+            * self._inference_observation['natural_language_embedding'], # NOQA
+        }
 
     def fake_action_token_emb(self, action_tokens) -> tf.Tensor:
         """Just pad with zeros."""
@@ -355,7 +354,7 @@ class TransformerNetworkTestUtils(tf.test.TestCase, parameterized.TestCase):
         window_range = min(self._step_idx + 1, self.time_sequence_length)
         for j in range(window_range):
             # The index step that is stored in j = 0.
-            first_step_idx = max(0, self._step_idx + 1 -
+            first_step_idx = max(0, self._step_idx + 1 - # NOQA
                                  self.time_sequence_length)
             image_idx = j * num_tokens_per_step
             action_start_index = image_idx + NUM_IMAGE_TOKENS
@@ -385,7 +384,7 @@ class TransformerNetworkTestUtils(tf.test.TestCase, parameterized.TestCase):
             num_tokens_per_step)
         transformer_shift = -1
         action_index = (
-            image_token_index + NUM_IMAGE_TOKENS + self.action_inf_idx +
+            image_token_index + NUM_IMAGE_TOKENS + self.action_inf_idx +  # NOQA
             transformer_shift)
         action_value = self._step_idx * self._num_action_tokens + self.action_inf_idx
         action_logits = self.get_action_logits(

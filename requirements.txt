@@ -8,6 +8,7 @@ tf-agents>=0.3.0
 tf-slim>=1.0
 nvidia-cublas-cu11
 nvidia-cudnn-cu11
--r tensor2robot/requirements.txt
+skimage
+-e tensor2robot
 # git+https://github.com/google-research/tensor2robot#tensor2robot
 # https://github.com/google-research/robotics_transformer/issues/1#issuecomment-1758818832

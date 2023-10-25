@@ -28,14 +28,12 @@ from robotics_transformer.transformer_network_test_set_up import (
 class TransformerNetworkTest(TransformerNetworkTestUtils):
 
     # pylint:disable=g-complex-comprehension
-    @parameterized.named_parameters([{
-        'testcase_name': '_' + name,
-        'state_spec': spec,
-        'train_observation': obs,
-    } for (name, spec,
-           obs) in zip(spec_names_list(), state_spec_list(), observations_list())]
-    )
-    # pylint:enable=g-complex-comprehension
+    @parameterized.named_parameters([{'testcase_name': f'_{name}',
+                                      'state_spec': spec,
+                                      'train_observation': obs}
+                                    for (name, spec, obs) in zip(spec_names_list(),
+                                                                 state_spec_list(),
+                                                                 observations_list())])
     def testTransformerTrainLossCall(self, state_spec, train_observation):
         network = transformer_network.TransformerNetwork(
             input_tensor_spec=state_spec,
@@ -56,11 +54,8 @@ class TransformerNetworkTest(TransformerNetworkTestUtils):
         self.assertCountEqual(self._train_action.keys(), output_actions.keys())
 
     # pylint:disable=g-complex-comprehension
-    @parameterized.named_parameters([{
-        'testcase_name': '_' + name,
-        'spec_name': name,
-    } for name in spec_names_list()])
-    # pylint:enable=g-complex-comprehension
+    @parameterized.named_parameters([{'testcase_name': f'_{name}',
+                                      'spec_name': name} for name in spec_names_list()])
     def testTransformerInferenceLossCall(self, spec_name):
         state_spec = NAME_TO_STATE_SPECS[spec_name]
         observation = NAME_TO_INF_OBSERVATIONS[spec_name]
@@ -89,13 +84,12 @@ class TransformerNetworkTest(TransformerNetworkTestUtils):
             self._inference_action.keys(), output_actions.keys())
 
     # pylint:disable=g-complex-comprehension
-    @parameterized.named_parameters([{
-        'testcase_name': '_' + name,
-        'state_spec': spec,
-        'train_observation': obs,
-    } for name, spec, obs in zip(spec_names_list(), state_spec_list(),
-                                 observations_list())])
-    # pylint:enable=g-complex-comprehension
+    @parameterized.named_parameters([{'testcase_name': f'_{name}',
+                                      'state_spec': spec,
+                                      'train_observation': obs}
+                                     for name, spec, obs in zip(spec_names_list(),
+                                                                state_spec_list(),
+                                                                observations_list())])
     def testTransformerLogging(self, state_spec, train_observation):
         network = transformer_network.TransformerNetwork(
             input_tensor_spec=state_spec,
@@ -121,11 +115,10 @@ class TransformerNetworkTest(TransformerNetworkTestUtils):
             training=True)
 
     # pylint:disable=g-complex-comprehension
-    @parameterized.named_parameters([{
-        'testcase_name': '_' + name,
-        'state_spec': spec,
-    } for name, spec in zip(spec_names_list(), state_spec_list())])
-    # pylint:enable=g-complex-comprehension
+    @parameterized.named_parameters([{'testcase_name': f'_{name}',
+                                      'state_spec': spec}
+                                     for name, spec in zip(spec_names_list(),
+                                                           state_spec_list())])
     def testTransformerCausality(self, state_spec):
         """Tests the causality for the transformer.
 
@@ -168,7 +161,7 @@ class TransformerNetworkTest(TransformerNetworkTestUtils):
 
         # Generate some random tokens for image and actions.
         all_tokens = tf.random.uniform(
-            shape=[time_sequence_length *
+            shape=[time_sequence_length * # NOQA
                    (tokens_per_image + tokens_per_action)],
             dtype=tf.int32,
             maxval=10,
@@ -183,7 +176,7 @@ class TransformerNetworkTest(TransformerNetworkTestUtils):
             batch_size=1,
             training=False)[0]
 
-        for t in range(time_sequence_length *
+        for t in range(time_sequence_length * # NOQA
                        (tokens_per_image + tokens_per_action)):
             # Zero out future input tokens.
             all_tokens_at_t = tf.concat(
@@ -221,7 +214,7 @@ class TransformerNetworkTest(TransformerNetworkTestUtils):
         self.assertAllEqual(
             self._agent._actor_network._action_tokens_mask,
             tf.constant([
-                image_tokens, image_tokens + 1, 2 *
+                image_tokens, image_tokens + 1, 2 * # NOQA
                 (image_tokens) + action_tokens,
                 2 * (image_tokens) + action_tokens + 1
             ], tf.int32))

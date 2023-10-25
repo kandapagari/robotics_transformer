@@ -176,6 +176,7 @@ class TransformerNetwork(network.Network):
         return int(n / self._single_time_step_num_tokens)
 
     def _generate_masks(self):
+        # sourcery skip: for-append-to-extend, use-itertools-product
         """Generate mask for action prediction loss and attention
         visualization."""
         # each time step = [image, action]
@@ -186,10 +187,10 @@ class TransformerNetwork(network.Network):
         self._all_num_tokens = (
             self._time_sequence_length * self._single_time_step_num_tokens)
 
-        # create mask for action predition loss
+        # create mask for action prediction loss
         self._action_tokens_mask = []
         for n in range(0, self._all_num_tokens, self._single_time_step_num_tokens):
-            for x in range(0, self._tokens_per_action, 1):
+            for x in range(self._tokens_per_action):
                 self._action_tokens_mask.append(
                     x + n + self._tokens_per_context_image)
         self._action_tokens_mask = tf.constant(
@@ -313,7 +314,7 @@ class TransformerNetwork(network.Network):
             transformer_shift = -1
             # We only want to get the action predicted at time_step.
             start_index = (
-                transformer_shift + self._tokens_per_context_image + action_t *
+                transformer_shift + self._tokens_per_context_image + action_t * # NOQA
                 (self._single_time_step_num_tokens))
             current_action_tokens = []
             action_predictions_logits = []
@@ -390,7 +391,7 @@ class TransformerNetwork(network.Network):
             num_items = (
                 tf.cast(b * t, tf.float32) * self._single_time_step_num_tokens)
             action_loss = tf.reduce_mean(
-                self._loss_object(action_tokens, action_logits_for_training) /
+                self._loss_object(action_tokens, action_logits_for_training) / # NOQA
                 num_items,
                 axis=-1)
 
@@ -438,7 +439,7 @@ class TransformerNetwork(network.Network):
             batch_size = image.shape[0]
             num_ts = image.shape[1]
             logging.info('image shape %s', image.shape)
-            # Concat images for different timesteps across width.
+            # Concat images for different timestep across width.
             image = tf.concat(tf.unstack(image, axis=1), 2)
             # Concat images for different batches (up to 8) across height.
             image = tf.expand_dims(
@@ -486,7 +487,7 @@ class TransformerNetwork(network.Network):
                         img_tf_ts_concat_min = tf.reduce_min(
                             img_tf_ts_concat, axis=[1, 2], keepdims=True)
                         img_tf_ts_concat = (img_tf_ts_concat - img_tf_ts_concat_min) / (
-                            tf.reduce_max(img_tf_ts_concat, axis=[1, 2], keepdims=True) -
+                            tf.reduce_max(img_tf_ts_concat, axis=[1, 2], keepdims=True) - # NOQA
                             img_tf_ts_concat_min)
                         img_tf_ts_concat = tf.concat(
                             tf.unstack(img_tf_ts_concat, axis=0)[:8], 0)
@@ -504,7 +505,7 @@ class TransformerNetwork(network.Network):
                                 1] and img_tf_ts_concat.shape[2] == image.shape[2]:
                             # can overlay
                             overlay_viz = tf.cast(
-                                (tf.cast(image, tf.float32) *
+                                (tf.cast(image, tf.float32) * # NOQA
                                  (0.2 + img_tf_ts_concat) / 1.2),
                                 tf.uint8)
                             tf.summary.image(
@@ -526,7 +527,7 @@ class TransformerNetwork(network.Network):
             accuracy = tf.reduce_mean(token_accuracy)
             tf.compat.v2.summary.scalar(
                 name='accuracy', data=accuracy, step=self._train_step_counter)
-            # Accuracy across timesteps
+            # Accuracy across timestep
             for t in range(self._time_sequence_length):
                 tf.compat.v2.summary.scalar(
                     name='accuracy/time_step/{}'.format(t),
