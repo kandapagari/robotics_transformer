@@ -30,6 +30,13 @@ cd ../..
 python -m robotics_transformer.tokenizers.action_tokenizer_test
 ```
 
+if git ls is available use the following to get the correct weights
+
+```bash
+git lfs fetch --all
+git lfs pull
+```
+
 ### Running Tests
 
 To run RT-1 tests, you can clone the git repo and run
