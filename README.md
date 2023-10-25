@@ -27,6 +27,10 @@ pip install -r requirements.txt
 cd tensor2robot/proto
 protoc -I=./ --python_out=`pwd` t2r.proto
 cd ../..
+# To add cudnn path
+CUDNN_PATH=$(dirname $(python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
+export LD_LIBRARY_PATH=$CUDNN_PATH/lib:$CONDA_PREFIX/lib/:$LD_LIBRARY_PATH
+# Test
 python -m robotics_transformer.tokenizers.action_tokenizer_test
 ```
 
