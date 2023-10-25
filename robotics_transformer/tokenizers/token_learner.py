@@ -122,8 +122,7 @@ class TokenLearnerModule(tf.keras.layers.Layer):
         selected = self.mlp(
             selected, is_training=training)  # Shape: [bs, h*w, n_token].
 
-        # Shape: [bs, n_token, h*w].
-        selected = tf.transpose(selected, [0, 2, 1])
+        selected = tf.transpose(selected, [0, 2, 1])  # Shape: [bs, n_token, h*w].
         selected = tf.nn.softmax(selected, axis=-1)
 
         return tf.einsum("...si,...id->...sd", selected, inputs)
