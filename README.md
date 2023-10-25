@@ -22,9 +22,11 @@ Clone the repo
 ```bash
 git clone --recursive https://github.com/kandapagari/robotics_transformer.git
 conda create -n rt python=3.11 -y
-pip install -r robotics_transformer/requirements.txt
+cd robotics_transformer
+pip install -r requirements.txt
 cd tensor2robot/proto
 protoc -I=./ --python_out=`pwd` t2r.proto
+cd ../..
 python -m robotics_transformer.tokenizers.action_tokenizer_test
 ```
 
